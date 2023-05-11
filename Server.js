@@ -1,4 +1,3 @@
-//require express
 const express = require('express');
 const bodyParser = require('body-parser');
 const notes = require('./db/db.json');
@@ -6,23 +5,20 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-// set port for heroku and localhost
 const PORT = process.env.PORT || 3001;
 
-// set app const as express
 const app = express();
 app.use(bodyParser.json({ extended: false }));
 
-//middleware to watch public dir
+//middleware
 app.use(express.static('public'));
 
-//route user to notes.html when /routes is accessed
+//route user to notes.html 
 app.get('/notes', (req, res) =>
     res.sendFile(path.join(__dirname, '/public/notes.html'))
 );
-// use body parser to parse req
-// POST data as JSON object
-// write with fs
+
+// write notes
 app.post('/api/notes', (req, res) => {
     notes.push(req.body);
     console.log(crypto.randomUUID())
@@ -30,7 +26,7 @@ app.post('/api/notes', (req, res) => {
     fs.writeFile('./db/db.json', JSON.stringify(notes), err => { if (err) console.log(err) });
 })
 
-// GET notes from json db
+// get notes
 app.get('/api/notes', (req, res) => {
     fs.readFile('./db/db.json', 'utf-8', (err) => { if (err) console.log(err) });
     res.json(notes);
@@ -49,6 +45,7 @@ app.get('/api/notes/:id', function (req, res) {
         }
     }
 });
+
 // delete notes
 app.delete('/api/notes/:id', function (req, res) {
     if (req.params.id) {
@@ -60,11 +57,10 @@ app.delete('/api/notes/:id', function (req, res) {
             }
         }
     }
-    // write the modified db to file
     fs.writeFile('./db/db.json', JSON.stringify(notes), (err) => { console.log(err) });
     res.json(`Deleted note ${req.params.id}`);
 })
-// listen() method is responsible for listening for incoming connections on the specified port 
+
 app.listen(PORT, () =>
     console.log(`Example app listening at http://localhost:${PORT}`)
 );
