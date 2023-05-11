@@ -4,6 +4,7 @@ let saveNoteBtn;
 let newNoteBtn;
 let noteList;
 
+//check window location
 if (window.location.pathname === '/notes') {
   noteTitle = document.querySelector('.note-title');
   noteText = document.querySelector('.note-textarea');
@@ -31,7 +32,7 @@ const getNotes = () =>
     headers: {
       'Content-Type': 'application/json',
     },
-  });
+  }).catch((err) => console.log(err));
 
 const saveNote = (note) =>
   fetch('/api/notes', {
@@ -40,7 +41,8 @@ const saveNote = (note) =>
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(note),
-  });
+  }).then(getAndRenderNotes())
+    .catch((err) => console.log(err));
 
 const deleteNote = (id) =>
   fetch(`/api/notes/${id}`, {
@@ -70,11 +72,12 @@ const handleNoteSave = () => {
   const newNote = {
     title: noteTitle.value,
     text: noteText.value,
+    id: crypto.randomUUID()
   };
   saveNote(newNote).then(() => {
     getAndRenderNotes();
     renderActiveNote();
-  });
+  }).catch((err) => (console.log(err)));
 };
 
 // Delete the clicked note

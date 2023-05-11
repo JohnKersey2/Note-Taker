@@ -1,3 +1,4 @@
+//require express
 const express = require('express');
 const bodyParser = require('body-parser');
 const notes = require('./db/db.json');
@@ -5,15 +6,17 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
+// set port for heroku and localhost
 const PORT = process.env.PORT || 3001;
 
+// set app const as express
 const app = express();
 app.use(bodyParser.json({ extended: false }));
 
-
+//middleware to watch public dir
 app.use(express.static('public'));
 
-
+//route user to notes.html when /routes is accessed
 app.get('/notes', (req, res) =>
     res.sendFile(path.join(__dirname, '/public/notes.html'))
 );
