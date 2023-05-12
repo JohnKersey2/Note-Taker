@@ -4,7 +4,7 @@ This is a simple note taker that stores saved notes in a database
 
 ## Link to Deployed Application
 
-<https://johnkersey2.github.io/Note-Taker/>
+<https://note-taker-john-kersey.herokuapp.com/>
 
 ## Applicaiton Screenshot
 
